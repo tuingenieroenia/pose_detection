@@ -45,7 +45,7 @@ pose = mp_pose.Pose()
 
 
 with mp_pose.Pose(static_image_mode = True) as pose:
-    image = cv2.imread("bueno1.jpeg")
+    image = cv2.imread("malo1.jpeg")
     h, w = image.shape[:2]
     
     imagen_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -106,6 +106,7 @@ with mp_pose.Pose(static_image_mode = True) as pose:
         print("Buena postura")
         
         cv2.putText(image, angle_text_string, (10, 30), font, 0.9, light_green, 2)
+        cv2.putText(image, "Buena postura", (10, 100), font, 0.9, blue, 2)
         cv2.putText(image, str(int(neck_inclination)), (l_shldr_x + 10, l_shldr_y), font, 0.9, light_green, 2)
         cv2.putText(image, str(int(torso_inclination)), (l_hip_x + 10, l_hip_y), font, 0.9, light_green, 2)
 
@@ -120,6 +121,7 @@ with mp_pose.Pose(static_image_mode = True) as pose:
         print("Mala postura")
         
         cv2.putText(image, angle_text_string, (10, 30), font, 0.9, red, 2)
+        cv2.putText(image, "Mala postura", (10, 100), font, 0.9, red, 2)
         cv2.putText(image, str(int(neck_inclination)), (l_shldr_x + 10, l_shldr_y), font, 0.9, red, 2)
         cv2.putText(image, str(int(torso_inclination)), (l_hip_x + 10, l_hip_y), font, 0.9, red, 2)
 
