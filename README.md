@@ -1,24 +1,66 @@
-#Importamos la bibliotecas necesarias
+# ANÁLISIS DE POSE
+![Python3.9.16](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+
+**DESCRIPCION:** Se presenta un sistema que análisa la postura de un inviduo sentado, para determinar si tiene o no una postura correcta.
+
+## Librerias utilizadas
+![MediaPipe](https://img.shields.io/badge/MediaPipe-8A2BE2)
+![OpenCV](https://img.shields.io/badge/OpenCV-346beb)
+
+### MediaPipe
+MediaPipe es la forma más sencilla para investigadores y desarrolladores de construir soluciones y aplicaciones de ML de clase mundial para móviles, borde, nube y la web.
+```python
+pip install mediapipe
+```
+
+
+### OpenCV
+OpenCV es la biblioteca de visión por computadora más grande del mundo. Es de código abierto, contiene más de 2500 algoritmos y es operada por la fundación sin fines de lucro Open Source Vision Foundation.
+```python
+pip install opencv-python
+```
+
+## Desarrollo
+A continuación, se presenta el desarrollo para detectar si hay buena o mala postura de una persona sentada mediante una imagen.
+
+### Importamos las librerías
+```python
 import cv2
 import time
 import math as m
 import mediapipe as mp
+```
 
-#Definimos la función que calcula la distancia entre los dos hombros
+### Definimos funciones matemáticas
+Las funciones matemáticas a definir se usan para calcular la distancia entre los dos hombros y el angulo de inclinación de la cabeza
+
+#### Distancia entre los hombros
+
+La función findDistance nos ayuda a determinar la distancia de desplazamiento entre dos puntos. Puede ser los puntos de la cadera, los ojos o los hombros. Como estos puntos siempre son más o menos simétricos con respecto al eje central. Con esto, vamos a incorporar la asistencia de alineación de la cámara en el script. La distancia se calcula utilizando la fórmula de distancia.
+
+$$distancia = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$$
+
+```python
 def findDistance(x1, y1, x2, y2):
     dist = m.sqrt((x2-x1)**2+(y2-y1)**2)
     return dist
+```
 
-#Definimos la función que calcula el ángulo de inclinación
+#### Angulo de inclinación del cuello
+
+Este es el factor determinista principal para la postura. Se utiliza el ángulo formado por la línea del cuello y la línea del torso con el eje y. La línea del cuello conecta el hombro y el ojo, aquí se toma el hombro como punto pivote. De manera similar, la línea del torso conecta la cadera y el hombro, donde la cadera se considera el punto pivote.
+
+$$\theta = \arccos\left(\frac{y_1^2 - y_1 y_2}{y_1 \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}}\right)$$
+
+```python
 def findAngle(x1, y1, x2, y2):
     theta = m.acos((y2 -y1)*(-y1) / (m.sqrt((x2 - x1)**2 + (y2 - y1)**2) * y1))
     degree = int(180/m.pi)*theta
     return degree
+```
 
-#Definimos la función que envía una alerta
-def sendWarning(x):
-    pass
-
+### Definimos algunas variables de estilo
+```python
 #Definimos la fuente de los mensajes
 font = cv2.FONT_HERSHEY_SIMPLEX
 
@@ -30,14 +72,18 @@ dark_blue = (127, 20, 0)
 light_green = (127, 233, 100)
 yellow = (0, 255, 255)
 pink = (255, 0, 255)
+```
 
-#Inicializamos la clase de captura de pose de mediapipe
+### Inicializamos las clases de MediaPipe
+```python
 mp_pose = mp.solutions.pose
 pose = mp_pose.Pose()
+```
 
-
+### Realizamos el procesamiento
+```python
 with mp_pose.Pose(static_image_mode = True) as pose:
-    image = cv2.imread("bueno1.jpeg")
+    image = cv2.imread("malo1.jpeg")
     h, w = image.shape[:2]
     
     imagen_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -124,7 +170,19 @@ with mp_pose.Pose(static_image_mode = True) as pose:
         cv2.line(image, (l_hip_x, l_hip_y), (l_hip_x, l_hip_y - 100), red, 4)
         
     cv2.imshow("Image", image)
-    cv2.imwrite("Salida.jpg", image)
     cv2.waitKey(0)
+```
 
-cv2.destroyAllWindows()
+## EJEMPLOS
+
+### Mala Postura
+La imagen de entrada es la siguiente
+![Mala Postura Imagen 1](malo1.jpeg)
+El resultado obtenido por el código es
+![Mala Postura Imagen 2](Salida_mala.jpg)
+
+### Buena Postura
+La imagen de entrada es la siguiente
+![Buena Postura Imagen 1](bueno1.jpeg)
+El resultado obtenido por el código es
+![Buena Postura Imagen 2](Salida_bueno.jpg)
