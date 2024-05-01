@@ -1,4 +1,13 @@
 # ANÁLISIS DE POSE
+
+### AUTORES:
++ López Álvarez Luis Ángel
++ Ramírez Salas Carlos
++ Rangel Mendez David Alberto
++ Sánchez Rodríguez Irmin Yael
++ Vargas Soriano Flor Arlette
++ Vázquez Lona Arturo
+
 ![Python3.9.16](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 
 **DESCRIPCION:** Se presenta un sistema que análisa la postura de un inviduo sentado, para determinar si tiene o no una postura correcta.
